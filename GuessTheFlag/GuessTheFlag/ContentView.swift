@@ -18,6 +18,8 @@ struct ContentView: View {
 	@State private var score = 0
 	@State private var roundCounter = 1
 
+	@State private var animationAmmount = 0.0
+
     var body: some View {
 		ZStack {
 			LinearGradient(colors: [.blue, .black], startPoint: .top, endPoint: .bottom)
@@ -38,12 +40,15 @@ struct ContentView: View {
 
 					ForEach (0..<3) { number in
 						Button {
+							animationAmmount += 360
 							flagTapped(number)
 						} label: {
 							FlagImage(name: countries[number])
+								.rotation3DEffect(.degrees(animationAmmount), axis: (x: 0, y: 1, z: 0))
 						}
 
 					}
+
 				}
 				Spacer()
 				Spacer()
