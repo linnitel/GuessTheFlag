@@ -53,20 +53,10 @@ struct ContentView: View {
 				Spacer()
 			}
 		}
-//		.alert(scoreTitle, isPresented: $showingScore) {
-//			Button("Continue", action: restart)
-//		} message: {
-//			Text("You score is \(score)")
-//		}
-		.alert(isPresented: $showingScore) {
-			switch activeAlert {
-				case .firstAlert:
-					return Alert(title: Text("Correct"), message: Text("Your score is \(score)"), dismissButton: .default(Text("Continue"), action: restart))
-				case .secondAlert:
-					return Alert(title: Text("Wrong! That’s the flag of \(countries[correctAnswer])"), message: Text("Your score is \(score)"), dismissButton: .default(Text("Continue"), action: restart))
-				case .thirdAlert:
-					return Alert(title: Text("Game over"), message: Text("Your score is \(score)"), dismissButton: .default(Text("Restart"), action: restart))
-			}
+		.alert("Game over", isPresented: $showingScore) {
+			Button("New game", action: restart)
+		} message: {
+			Text("Your score is \(score)")
 		}
     }
 
@@ -75,31 +65,13 @@ struct ContentView: View {
 			score += 1
 		}
 		if roundCounter < 8 {
-
-//			print("round counter \(roundCounter)")
 			roundCounter += 1
 			newRound()
-//			if number == correctAnswer {
-//				scoreTitle = "Correct"
-//				score += 1
-////				activeAlert = .firstAlert
-//			} else {
-//				scoreTitle = "Wrong"
-////				activeAlert = .secondAlert
-//			}
-//		} else {
-//			if number == correctAnswer {
-//				score += 1
-//			}
-//			activeAlert = .thirdAlert
-//			score = 0
-//			roundCounter = 1
 
 		} else {
 			activeAlert = .thirdAlert
 			showingScore = true
 		}
-//		showingScore = true
 	}
 
 	func restart() {
