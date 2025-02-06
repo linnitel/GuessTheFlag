@@ -18,7 +18,10 @@ struct ContentView: View {
 	@State private var score = 0
 	@State private var roundCounter = 1
 
-	@State private var animationAmmount = 0.0
+	@State private var animationAmount = 0.0
+
+	@State private var selectedButton: Int?
+	@State private var opacity = 1.0
 
     var body: some View {
 		ZStack {
@@ -40,16 +43,23 @@ struct ContentView: View {
 
 					ForEach (0..<3) { number in
 						Button {
-							animationAmmount += 360
+							animationAmount += 360
+							selectedButton = number
 							flagTapped(number)
 						} label: {
-							FlagImage(name: countries[number])
-								.rotation3DEffect(.degrees(animationAmmount), axis: (x: 0, y: 1, z: 0))
+							if number == correctAnswer {
+								FlagImage(name: countries[number])
+									.rotation3DEffect(.degrees(animationAmount), axis: (x: 0, y: 1, z: 0))
+							} else {
+								FlagImage(name: countries[number])
+							}
 						}
-
+						.phaseAnimator([true, false], trigger: selectedButton) { content, phase in
+							content.opacity(phase ? 1.0 : 0.25)
+						}
 					}
-
 				}
+
 				Spacer()
 				Spacer()
 				Text("Score: \(score)")
@@ -85,11 +95,14 @@ struct ContentView: View {
 		showingScore = false
 		score = 0
 		roundCounter = 1
+//		selectedButton = nil
 	}
 
 	func newRound() {
 		countries.shuffle()
 		correctAnswer = Int.random(in: 0...2)
+//		selectedButton = nil
+
 	}
 
 	enum ActiveAlert {
